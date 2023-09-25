@@ -3,8 +3,9 @@
 
 const request = require('request');
 const fs = require('fs');
-const url = process.argv[2];
-const fileName = process.argv[3];
 
-const fileStream = fs.createWriteStream(fileName);
-request(url).pipe(fileStream);
+request(process.argv[2], function (err, response, body) {
+  if (err == null) {
+    fs.writeFileSync(process.argv[3], body);
+  }
+});
