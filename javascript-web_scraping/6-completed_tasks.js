@@ -1,21 +1,20 @@
 #!/usr/bin/node
 /* task 6 completed tasks */
-const request = require('request');
-const url = process.argv[2];
 
-request(url, function (error, response, body) {
-  if (error) {
-    console.log(error);
-  }
-  const completed = {};
-  for (const task of JSON.parse(body)) {
-    if (task.completed === true) {
-      if (completed[task.userId]) {
-        completed[task.userId]++;
-      } else {
-        completed[task.userId] = 1;
+const request = require('request');
+
+request(process.argv[2], function (err, response, body) {
+  if (err == null) {
+    const resp = {};
+    const json = JSON.parse(body);
+    for (let i = 0; i < json.length; i++) {
+      if (json[i].completed === true) {
+        if (resp[json[i].userId] === undefined) {
+          resp[json[i].userId] = 0;
+        }
+        resp[json[i].userId]++;
       }
     }
+    console.log(resp);
   }
-  console.log(completed);
 });
