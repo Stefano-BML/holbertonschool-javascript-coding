@@ -1,20 +1,10 @@
-const readline = require('readline');
-
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
+process.stdout.write('Welcome to Holberton School, what is your name?\n');
+process.stdin.on('readable', () => {
+  const input = process.stdin.read();
+  if (input !== null) process.stdout.write(`Your name is: ${input}`);
 });
 
-console.log('Welcome to Holberton School, what is your name?');
-
-rl.question('', (name) => {
-  console.log(`Your name is: ${name}`);
-  console.log('This important software is now closing');
-  rl.close();
-});
-
-rl.on('close', () => {
-  if (process.env.NODE_ENV !== 'test') {
-    process.exit(0);
-  }
+// The end event is trigerred by the entering input
+process.stdin.on('end', () => {
+  process.stdout.write('This important software is now closing\n');
 });
