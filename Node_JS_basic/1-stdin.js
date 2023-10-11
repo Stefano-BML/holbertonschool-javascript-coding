@@ -14,5 +14,7 @@ rl.question('', (name) => {
 });
 
 rl.on('close', () => {
-  process.exit(0);
+  if (process.env.NODE_ENV !== 'test') {
+    process.exit(0);
+  }
 });
