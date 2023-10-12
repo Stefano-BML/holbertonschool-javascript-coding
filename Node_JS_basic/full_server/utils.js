@@ -1,20 +1,33 @@
-// full_server/utils.js
-import fs from 'fs/promises';
+const fs = require('fs').promises;
 
-export function readDatabase(filePath) {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const data = await fs.readFile(filePath, 'utf-8');
-      // Process data and return an object with students per field
-      // Example: { CS: ['John', 'Alice'], SWE: ['Bob', 'Carol'] }
-      resolve(processData(data));
-    } catch (error) {
-      reject(new Error('Cannot load the database'));
-    }
-  });
+async function readDatabase(path) {
+  // get the file data asynchronously
+  return fs.readFile(path, 'utf8')
+    .then((data) => {
+      const stringData = data.toString();
+
+      const arrayData = stringData.split('\n').slice(1);
+
+      const filteredArrayData = arrayData.filter((line) => line !== '');
+
+      const namesByField = {};
+
+      filteredArrayData.forEach((line) => {
+        const parts = line.split(',');
+        const firstName = parts[0];
+        const field = parts[3];
+
+        if (!namesByField[field]) {
+          namesByField[field] = [];
+        }
+
+        namesByField[field].push(firstName);
+      });
+      return namesByField;
+    })
+    .catch(() => {
+      throw new Error('Cannot load the database');
+    });
 }
 
-function processData(data) {
-  // Process the data and return the desired object
-  // Implement this logic based on your data format
-}
+module.exports = readDatabase;
